@@ -33,14 +33,14 @@ $nodes | ForEach-Object {
 
             # Remove the replica from the Node:
             Write-Host "    Removing $applicationName replica on $nodeName (partitionId: $partitionId, instanceId: $instanceId)"      
-            $success = Remove-ServiceFabricReplica -NodeName $nodeName -PartitionId $partitionId -ReplicaOrInstanceId $instanceId -CommandCompletionMode Invalid
+            $success = Remove-ServiceFabricReplica -NodeName $nodeName -PartitionId $partitionId -ReplicaOrInstanceId $instanceId -CommandCompletionMode Verify
             if ($success) {
                 Write-Host "      -> Successfully removed the replica of $applicationName on $nodeName" -ForegroundColor Green
             }
 
             # Restart the process on the Node:
             Write-Host "    Restarting $applicationName process on $nodeName (serviceManifestName: $serviceManifestName, codePackageName: $codePackageName)"
-            $success = Restart-ServiceFabricDeployedCodePackage -NodeName $nodeName -ApplicationName $applicationName -CodePackageName $codePackageName -ServiceManifestName $serviceManifestName -CommandCompletionMode Invalid
+            $success = Restart-ServiceFabricDeployedCodePackage -NodeName $nodeName -ApplicationName $applicationName -CodePackageName $codePackageName -ServiceManifestName $serviceManifestName -CommandCompletionMode Verify
             if ($success) {
                 Write-Host "      -> Successfully restarted the process of $applicationName on $nodeName" -ForegroundColor Green
             }
