@@ -1,19 +1,14 @@
 Param (
-    [Parameter(Mandatory=$true)] [uri[]] $ApplicationNames,
+    [Parameter(Mandatory=$true)] [uri[]] $Apps,
     [string] $ConnectionEndpoint = "localhost:19000"
 )
 
 try {
-    Test-ServiceFabricClusterConnection | Out-Null
-}
-catch {
-    try {
-        Write-Host "Connecting to $ConnectionEndpoint ..." -ForegroundColor Yellow
-        Connect-ServiceFabricCluster -ConnectionEndpoint $ConnectionEndpoint | Out-Null
-        Write-Host "  success!" -ForegroundColor Green
-    } catch {
-        throw "Active connection to Service Fabric cluster required"
-    }
+    Write-Host "Connecting to $ConnectionEndpoint ..." -ForegroundColor Yellow
+    Connect-ServiceFabricCluster -ConnectionEndpoint $ConnectionEndpoint | Out-Null
+    Write-Host "  success!" -ForegroundColor Green
+} catch {
+    throw "Could not connect to $ConnectionEndpoint"
 }
 
 $nodes = Get-ServiceFabricNode -StatusFilter Up
@@ -21,7 +16,7 @@ $nodes | ForEach-Object {
     $nodeName = $_.NodeName
     Write-Host "Processing node: $nodeName" -ForegroundColor Yellow
 
-    foreach ($applicationName in $ApplicationNames) {
+    foreach ($applicationName in $Apps) {
 
         if (-Not $applicationName.ToString().StartsWith("fabric:/")) {
             $applicationName = "fabric:/" + $applicationName;
