@@ -1,6 +1,4 @@
-# restart-service-fabric-service-powershell
-
-## What is this
+## Purpose
 A powershell script to restart multiple Service Fabric apps, node-by-node.
 
 ## Usage 
