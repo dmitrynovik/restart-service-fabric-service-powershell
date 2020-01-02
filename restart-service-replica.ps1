@@ -16,6 +16,8 @@ $nodes = Get-ServiceFabricNode -StatusFilter Up
 $nodes | ForEach-Object {
     $nodeName = $_.NodeName
     $replicas = Get-ServiceFabricDeployedReplica -NodeName $nodeName -ApplicationName $ApplicationName
+    Write-Host "=== Processing Node $nodeName" -ForegroundColor Green
+
     $replicas | ForEach-Object {
 		$partitionId = $_.partitionId
         $instanceId = $_.instanceId
