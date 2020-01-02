@@ -6,7 +6,7 @@ Param (
 try {
     Write-Host "Connecting to $ConnectionEndpoint ..." -ForegroundColor Yellow
     Connect-ServiceFabricCluster -ConnectionEndpoint $ConnectionEndpoint | Out-Null
-    Write-Host "  success!" -ForegroundColor Green
+    Write-Host "  -> success!" -ForegroundColor Green
 } catch {
     throw "Could not connect to $ConnectionEndpoint"
 }
@@ -35,14 +35,14 @@ $nodes | ForEach-Object {
             Write-Host "    Removing $applicationName replica on $nodeName (partitionId: $partitionId, instanceId: $instanceId)"      
             $success = Remove-ServiceFabricReplica -NodeName $nodeName -PartitionId $partitionId -ReplicaOrInstanceId $instanceId -CommandCompletionMode Invalid
             if ($success) {
-                Write-Host "      Successfully removed the replica of $applicationName on $nodeName" -ForegroundColor Green
+                Write-Host "      -> Successfully removed the replica of $applicationName on $nodeName" -ForegroundColor Green
             }
 
             # Restart the process on the Node:
             Write-Host "    Restarting $applicationName process on $nodeName (serviceManifestName: $serviceManifestName, codePackageName: $codePackageName)"
             $success = Restart-ServiceFabricDeployedCodePackage -NodeName $nodeName -ApplicationName $applicationName -CodePackageName $codePackageName -ServiceManifestName $serviceManifestName -CommandCompletionMode Invalid
             if ($success) {
-                Write-Host "      Successfully restarted the process of $applicationName on $nodeName" -ForegroundColor Green
+                Write-Host "      -> Successfully restarted the process of $applicationName on $nodeName" -ForegroundColor Green
             }
         }
     }
