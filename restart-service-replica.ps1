@@ -1,9 +1,8 @@
 Param (
-    [Parameter(Mandatory=$true)] [uri] $ApplicationName,
-    $CommandCompletionMode = "Verify"
+    [Parameter(Mandatory=$true)] [uri] $ApplicationName
 )
 
-Write-Host "Restarting Service Fabric Application: $ApplicationName, CommandCompletionMode: $CommandCompletionMode"
+Write-Host "Restarting Service Fabric Application: $ApplicationName"
 
 try {
     Test-ServiceFabricClusterConnection | Out-Null
@@ -16,7 +15,7 @@ $nodes = Get-ServiceFabricNode -StatusFilter Up
 $nodes | ForEach-Object {
     $nodeName = $_.NodeName
     $replicas = Get-ServiceFabricDeployedReplica -NodeName $nodeName -ApplicationName $ApplicationName
-    Write-Host "=== Processing Node $nodeName" -ForegroundColor Green
+    Write-Host "=== Processing Node: $nodeName" -ForegroundColor Yellow
 
     $replicas | ForEach-Object {
 		$partitionId = $_.partitionId
@@ -26,7 +25,7 @@ $nodes | ForEach-Object {
 
         # Remove the replica from the Node:
         Write-Host "Removing $ApplicationName replica on $nodeName (partitionId: $partitionId, instanceId: $instanceId)"      
-        $success = Remove-ServiceFabricReplica -NodeName $nodeName -PartitionId $partitionId -ReplicaOrInstanceId $instanceId -CommandCompletionMode $CommandCompletionMode
+        $success = Remove-ServiceFabricReplica -NodeName $nodeName -PartitionId $partitionId -ReplicaOrInstanceId $instanceId -CommandCompletionMode Invalid
         if ($success) {
             Write-Host "Successfully removed the replica of $ApplicationName on $nodeName" -ForegroundColor Green
         }
