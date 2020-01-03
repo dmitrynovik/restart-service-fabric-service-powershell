@@ -19,7 +19,7 @@ $nodes | ForEach-Object {
     $nodeName = $_.NodeName
     Write-Host "Processing node: $nodeName" -ForegroundColor Yellow
 
-    [int[]] $restartAppJobs =  @()
+    $restartAppJobs = New-Object Collections.Generic.List[Int]
 
     $Apps | ForEach-Object {
 
@@ -69,7 +69,7 @@ $nodes | ForEach-Object {
             }
         }
 
-        $restartAppJobs += $restartAppJob.Id
+        $restartAppJobs.Add($restartAppJob.Id)
     } # Apps | ...
 
     Write-Host "  Node $nodeName -> waiting for parallel app restart to finish ..."
