@@ -25,6 +25,7 @@ $nodes | ForEach-Object {
 
         $applicationName = $_            
 
+        # Restart passed $Apps on $nodeName IN PARALLEL:
         $restartAppJob = Start-Job -Name $nodeName+":"+$applicationName `
             -ArgumentList $ConnectionEndpoint, $nodeName, $applicationName `
             -ScriptBlock { 
