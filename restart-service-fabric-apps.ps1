@@ -3,6 +3,11 @@ Param (
     [string] $ConnectionEndpoint = "localhost:19000"
 )
 
+$DefaultPort = 19000;
+if (-Not $ConnectionEndpoint.Contains(":")) {
+    $ConnectionEndpoint = $ConnectionEndpoint + ":" + $DefaultPort;
+}
+
 Write-Host "Restarting apps [$Apps] on cluster: $ConnectionEndpoint" -ForegroundColor Red
 
 try {
@@ -76,4 +81,6 @@ $nodes | ForEach-Object {
     Write-Host "  Node $nodeName -> waiting for parallel app restart to finish ..."
     Wait-Job -Id $restartAppJobs
 }
+
+Write-Host "Done" -ForegroundColor Green
     
