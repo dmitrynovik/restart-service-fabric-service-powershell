@@ -31,7 +31,7 @@ $nodes | ForEach-Object {
     while ($true)  {
        $nodeState = Get-ServiceFabricNode $nodeName
        $nodeStatus = $nodeState.NodeStatus  
-       if ($elapsedTime > $DisableNodeTimeout) {
+       if ($elapsedTime -gt $DisableNodeTimeout) {
             Write-Host "    Failed to timely disable node $nodeName" -ForegroundColor Red
     } elseif ($nodeStatus -eq [System.Fabric.Query.NodeStatus]::Up -or `
             $nodeStatus -eq [System.Fabric.Query.NodeStatus]::Disabling -or `
