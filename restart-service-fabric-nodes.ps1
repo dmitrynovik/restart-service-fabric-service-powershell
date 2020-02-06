@@ -33,6 +33,7 @@ $nodes | ForEach-Object {
        $nodeStatus = $nodeState.NodeStatus  
        if ($elapsedTime -gt $DisableNodeTimeout) {
             Write-Host "    Failed to timely disable node $nodeName" -ForegroundColor Red
+            Break
     } elseif ($nodeStatus -eq [System.Fabric.Query.NodeStatus]::Up -or `
             $nodeStatus -eq [System.Fabric.Query.NodeStatus]::Disabling -or `
             $nodeStatus -eq [System.Fabric.Query.NodeStatus]::Enabling) {
