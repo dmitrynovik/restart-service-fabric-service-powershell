@@ -25,21 +25,21 @@ $nodes | ForEach-Object {
 
     Write-Host "  Disabling node $nodeName ..." -ForegroundColor Yellow
     Disable-ServiceFabricNode -NodeName $nodeName -Force -Intent Restart -TimeoutSec $DisableNodeTimeout
-    $elaspedTime = 0
+    $elapsedTime = 0
     $disabled = $false
 
     while ($true)  {
        $nodeState = Get-ServiceFabricNode $nodeName
        $nodeStatus = $nodeState.NodeStatus  
-       if ($elaspedTime > $DisableNodeTimeout) {
+       if ($elapsedTime > $DisableNodeTimeout) {
             Write-Host "    Failed to timely disable node $nodeName" -ForegroundColor Red
     } elseif ($nodeStatus -eq [System.Fabric.Query.NodeStatus]::Up -or `
             $nodeStatus -eq [System.Fabric.Query.NodeStatus]::Disabling -or `
             $nodeStatus -eq [System.Fabric.Query.NodeStatus]::Enabling) {
             $timeToSleep = 1
-            Write-Host "    Status of $nodeName : $nodeStatus, waiting $timeToSleep seconds ($elapesedTime out of $DisableNodeTimeout)..."
+            Write-Host "    Status of $nodeName : $nodeStatus, waiting $timeToSleep seconds ($elapsedTime out of $DisableNodeTimeout)..."
             Start-Sleep -Seconds $timeToSleep
-            $elaspedTime += 1
+            $elapsedTime += 1
        } else {
             $disabled = $true
             Write-Host "    Node $nodeName disabled"
